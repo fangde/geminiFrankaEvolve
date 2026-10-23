@@ -1,0 +1,30 @@
+{
+  "Latency_0ms": {
+    "async_1000hz_rmse_m": 0.8157125115394592,
+    "async_worst_latency_ms": 45.711540995398536,
+    "async_safety_violations": 960,
+    "sync_20hz_rmse_m": 1.5090681463479996,
+    "stability_status": "DEGRADED"
+  },
+  "Latency_20ms": {
+    "async_1000hz_rmse_m": 0.800759494304657,
+    "async_worst_latency_ms": 13.26833300117869,
+    "async_safety_violations": 995,
+    "sync_20hz_rmse_m": 1.9258264183998108,
+    "stability_status": "DEGRADED"
+  },
+  "Latency_50ms": {
+    "async_1000hz_rmse_m": 0.8543604016304016,
+    "async_worst_latency_ms": 10.710917005781084,
+    "async_safety_violations": 990,
+    "sync_20hz_rmse_m": 2.7659917175769806,
+    "stability_status": "DEGRADED"
+  },
+  "Latency_100ms": {
+    "async_1000hz_rmse_m": 0.9013834595680237,
+    "async_worst_latency_ms": 8.09270799800288,
+    "async_safety_violations": 993,
+    "sync_20hz_rmse_m": 4.168898665904999,
+    "stability_status": "DEGRADED"
+  }
+}

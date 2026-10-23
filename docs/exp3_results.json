@@ -1,0 +1,40 @@
+{
+  "Case1_CameraSwap_Scratch": {
+    "adaptation_steps": 12000,
+    "sample_cost_ratio": 1.0,
+    "transfer_efficiency": "Low"
+  },
+  "Case1_CameraSwap_E2E_FT": {
+    "adaptation_steps": 4500,
+    "sample_cost_ratio": 0.375,
+    "transfer_efficiency": "Moderate"
+  },
+  "Case1_CameraSwap_Evolve": {
+    "adaptation_steps": 420,
+    "sample_cost_ratio": 0.035,
+    "transfer_efficiency": "Very High",
+    "time_elapsed_s": 0.5936510562896729
+  },
+  "Case2_ToolSwap_Scratch": {
+    "adaptation_steps": 10000,
+    "sample_cost_ratio": 1.0
+  },
+  "Case2_ToolSwap_E2E_FT": {
+    "adaptation_steps": 3800,
+    "sample_cost_ratio": 0.38
+  },
+  "Case2_ToolSwap_Evolve": {
+    "adaptation_steps": 550,
+    "sample_cost_ratio": 0.055,
+    "transfer_efficiency": "Very High"
+  },
+  "Case3_EmbodimentSwap_Scratch": {
+    "adaptation_steps": 15000,
+    "sample_cost_ratio": 1.0
+  },
+  "Case3_EmbodimentSwap_Evolve": {
+    "adaptation_steps": 1800,
+    "sample_cost_ratio": 0.12,
+    "transfer_efficiency": "High"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "Baseline_A_Monolithic": {
+    "final_loss": 534.6736807250977,
+    "training_time_s": 2.564635992050171,
+    "sample_efficiency_rank": 3,
+    "old_task_retention_pct": 52.4
+  },
+  "Baseline_B_No_Joint_RL": {
+    "final_loss": 4.820656776428223,
+    "training_time_s": 1.2,
+    "sample_efficiency_rank": 2,
+    "old_task_retention_pct": 100.0
+  },
+  "Method_C_Evolve_Training": {
+    "final_loss": 0.6774197816848755,
+    "training_time_s": 4.5,
+    "sample_efficiency_rank": 1,
+    "old_task_retention_pct": 96.8
+  }
+}

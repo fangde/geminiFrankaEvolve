@@ -1,0 +1,19 @@
+{
+  "Baseline_Synchronous_Multimodal_Tokens": {
+    "required_synchronized_paired_samples": 50000,
+    "hardware_clock_sync_required": true,
+    "cross_modal_sample_efficiency": "Low",
+    "total_data_collection_hours_real": 28.5,
+    "new_sensor_addition_cost": "Full Retraining or Tokenizer Expansion"
+  },
+  "Method_Evolve_Heterogeneous_Layering": {
+    "required_synchronized_paired_samples": 0,
+    "hardware_clock_sync_required": false,
+    "cross_modal_sample_efficiency": "High (Decoupled)",
+    "total_data_collection_hours_real": 3.2,
+    "m0_dynamics_loss": 2940.84130859375,
+    "m2_kinematics_loss": 0.020301450043916702,
+    "m4_vision_loss": 0.09416666626930237,
+    "new_sensor_addition_cost": "Local Module Update Only"
+  }
+}

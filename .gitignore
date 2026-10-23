@@ -1,0 +1,21 @@
+# macOS system and external drive files
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+Icon
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Simulator logs and temps
+MUJOCO_LOG.TXT
+*.log
+/tmp/

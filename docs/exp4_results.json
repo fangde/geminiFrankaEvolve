@@ -1,0 +1,32 @@
+{
+  "Tool_A_Precision_Tweezers": {
+    "mass_kg": 0.15,
+    "length_offset_m": 0.05,
+    "track_rmse_m": 0.5996080040931702,
+    "mean_contact_force_N": 0.0,
+    "peak_contact_force_N": 0.0,
+    "m4_vision_reused": true,
+    "adaptation_steps_needed": 37,
+    "scratch_retrain_steps": 12000
+  },
+  "Tool_B_Flexible_Brush": {
+    "mass_kg": 0.35,
+    "length_offset_m": 0.08,
+    "track_rmse_m": 0.5997354388237,
+    "mean_contact_force_N": 0.0,
+    "peak_contact_force_N": 0.0,
+    "m4_vision_reused": true,
+    "adaptation_steps_needed": 87,
+    "scratch_retrain_steps": 12000
+  },
+  "Tool_C_Heavy_Shear": {
+    "mass_kg": 2.5,
+    "length_offset_m": 0.12,
+    "track_rmse_m": 0.6007387638092041,
+    "mean_contact_force_N": 0.0,
+    "peak_contact_force_N": 0.0,
+    "m4_vision_reused": true,
+    "adaptation_steps_needed": 625,
+    "scratch_retrain_steps": 12000
+  }
+}
