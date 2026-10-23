@@ -1,6 +1,7 @@
 # Evolve Training: Franka Emika Panda Implementation
 
 [![Paper Website](https://img.shields.io/badge/Paper-GitHub%20Pages-indigo.svg)](https://fangde.github.io/geminiFrankaEvolve/)
+[![Paper PDF](https://img.shields.io/badge/Paper-PDF-red.svg)](docs/paper_evolve_training.pdf)
 [![Version](https://img.shields.io/badge/version-1.4-blue.svg)](docs/whitepaper_v1.4.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-3.8.0-orange.svg)](https://mujoco.org)
