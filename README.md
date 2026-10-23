@@ -1,8 +1,11 @@
 # Evolve Training: Franka Emika Panda Implementation
 
+[![Paper Website](https://img.shields.io/badge/Paper-GitHub%20Pages-indigo.svg)](https://fangde.github.io/geminiFrankaEvolve/)
 [![Version](https://img.shields.io/badge/version-1.4-blue.svg)](docs/whitepaper_v1.4.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-3.8.0-orange.svg)](https://mujoco.org)
+
+> 🌐 **在线论文与交互式实验报告网站已发布**：[https://fangde.github.io/geminiFrankaEvolve/](https://fangde.github.io/geminiFrankaEvolve/)
 
 Implementation of **Evolve Training: Progressive and Composable Learning of Embodied Control Hierarchies (具身智能控制层级的渐进式与可组合学习)** on Franka Emika Panda 7-DoF robotic arm.
 
