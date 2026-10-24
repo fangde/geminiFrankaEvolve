@@ -99,29 +99,29 @@
     <!-- Key Empirical Highlights Grid -->
     <div class="mt-14 grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 text-center">
       <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
-        <div class="text-2xl sm:text-3xl font-extrabold text-indigo-600">~800x</div>
-        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">收敛精度提升</div>
-        <div class="text-xs text-slate-400 mt-0.5">Loss 0.677 vs 534.6</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-indigo-600">0.77 mm</div>
+        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">闭环极限精度</div>
+        <div class="text-xs text-slate-400 mt-0.5">770 微米超高精度</div>
       </div>
       <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
-        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600">96.8%</div>
-        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">旧技能保留率</div>
-        <div class="text-xs text-slate-400 mt-0.5">无灾难性遗忘</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600">100.0%</div>
+        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">到点成功率</div>
+        <div class="text-xs text-slate-400 mt-0.5">40目标零长尾脱靶</div>
       </div>
       <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
-        <div class="text-2xl sm:text-3xl font-extrabold text-blue-600">0 帧</div>
-        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">强同步数据依赖</div>
-        <div class="text-xs text-slate-400 mt-0.5">解耦异构数据利用</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-blue-600">99.5%</div>
+        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">M0发散抑制率</div>
+        <div class="text-xs text-slate-400 mt-0.5">438.8mm -> 2.07mm</div>
       </div>
       <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
-        <div class="text-2xl sm:text-3xl font-extrabold text-violet-600">3.5% - 12%</div>
-        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">硬件迁移成本</div>
-        <div class="text-xs text-slate-400 mt-0.5">节约高达 96.5% 样本</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-violet-600">0.081 kg</div>
+        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">负载辨识误差</div>
+        <div class="text-xs text-slate-400 mt-0.5">MAE仅81克 (-67%)</div>
       </div>
       <div class="col-span-2 md:col-span-1 p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
         <div class="text-2xl sm:text-3xl font-extrabold text-cyan-600">1000 Hz</div>
-        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">多频异步闭环</div>
-        <div class="text-xs text-slate-400 mt-0.5">抵御 100ms 视觉延迟</div>
+        <div class="text-xs font-semibold uppercase text-slate-500 mt-1">硬实时力矩闭环</div>
+        <div class="text-xs text-slate-400 mt-0.5">阻尼隔离感知延迟</div>
       </div>
     </div>
 
@@ -210,10 +210,13 @@
           <span>摘要 (Abstract)</span>
         </h3>
         <p class="text-slate-700 leading-relaxed text-justify">
-          具身智能的核心挑战，不仅在于如何训练一个具有通用能力的模型，更在于如何将不同来源的数据、不同层次的控制能力以及不同机器人形态之间的物理差异高效组织起来。当前以视觉-语言-动作（VLA）为代表的研究尝试通过单体端到端多模态网络建立从感知到动作的黑盒映射，然而真实机器人天然具备多时间尺度、异构传感器与分层控制回路的物理特性。盲目的端到端黑盒学习面临样本效率低下、灾难性遗忘严重、强依赖严格时间同步多模态数据，以及跨硬件形态难以迁移的根本困境。
+          具身智能的核心挑战，不仅在于如何训练一个具有通用能力的模型，更在于如何将不同来源的数据、不同层次的控制能力以及不同机器人形态之间的物理差异高效组织起来。当前以视觉-语言-动作（VLA）为代表的研究尝试通过单体端到端网络建立从高层感知到动作力矩的黑盒映射，然而真实机器人天然具备多时间尺度、异构传感器与分层控制回路的物理特性。盲目的单体黑盒学习面临探索空间爆炸、闭环协变量漂移（Covariate Shift）与灾难性遗忘的严峻困境。
         </p>
         <p class="text-slate-700 leading-relaxed text-justify">
-          我们提出 <strong>Evolve Training（具身智能控制层级的渐进式与可组合学习）</strong>。其基本思想是：<strong>“从内环到外环，从简单物理能力到复杂认知能力，一次增加一个模块，一次增加一种能力”</strong>。每增加一个模块，首先通过监督模仿学习建立基本物理能力，再将其接入已有系统，通过带留存约束（$\mathcal{L}_{\text{retain}}$）的阶段性端到端强化学习进行联合优化。推理时保持各自的运行频率和分层异步控制机制（1000 Hz / 100 Hz / 20 Hz）。
+          我们提出 <strong>Evolve Training（具身智能控制层级的渐进式与可组合学习）</strong>。其核心哲学是：<strong>“端到端是阶段性的联合优化手段，而不是从零学习所有能力的起点；控制架构应按物理时间尺度分层生长，以高质量监督模仿（BC）构筑物理吸引子底座，以端到端强化微调压榨系统协同精度。”</strong>
+        </p>
+        <p class="text-slate-700 leading-relaxed text-justify">
+          在 Franka Emika Panda 机械臂与严格 MuJoCo 物理闭环评测中，针对纯模仿内环易失稳发散的问题，通过工作空间覆盖扩展（48.5万样本）与 DAgger 纠偏扰动力矩注入，M0 跟踪 RMSE 从 438.8 mm 直降 99.5% 达到 2.07 mm；进一步在 40 个随机目标与 1.0–3.0 kg 动态重载下执行端到端任务损失联合强化（Joint Task FT），平均闭环跟踪误差收敛至 <strong>0.77 毫米（770 微米）</strong>，到点成功率达到稳固的 <strong>100.0%</strong>。
         </p>
       </section>
 
@@ -340,42 +343,46 @@ flowchart TD
           <div class="flex items-center justify-between">
             <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
-              <span>实验 1：渐进式学习有效性与旧能力保留 (H1, H3, H4)</span>
+              <span>实验 1：严格物理模型下从 BC 筑底到端到端微调 (Strict MuJoCo Benchmark)</span>
             </h4>
-            <a href="reports/report_exp1_progressive_vs_e2e.md" class="text-xs text-indigo-600 hover:underline">查看完整报告 →</a>
+            <span class="text-xs text-slate-500 font-mono">40个随机目标 · 1-3kg动态负载 · 物理碰撞开</span>
           </div>
           <div class="overflow-x-auto rounded-xl border border-slate-200">
             <table class="w-full text-left text-xs sm:text-sm">
               <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
                 <tr>
-                  <th class="p-3">方案组别</th>
-                  <th class="p-3">收敛损失 (Final Loss)</th>
-                  <th class="p-3">样本效率排名</th>
-                  <th class="p-3">旧能力保留率 (Retention)</th>
-                  <th class="p-3">结论</th>
+                  <th class="p-3">方案阶段</th>
+                  <th class="p-3">平均末端误差 (Mean)</th>
+                  <th class="p-3">p90 尾部误差</th>
+                  <th class="p-3">最坏极值 (Max)</th>
+                  <th class="p-3">成功率 (<2cm)</th>
+                  <th class="p-3">物理表现分析</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 font-mono">
                 <tr class="hover:bg-slate-50/50">
-                  <td class="p-3 font-sans font-medium text-slate-900">Baseline A: Monolithic E2E RL</td>
-                  <td class="p-3 text-red-600 font-bold">534.6737</td>
-                  <td class="p-3 text-slate-500">Rank 3</td>
-                  <td class="p-3 text-red-600">52.4%</td>
-                  <td class="p-3 font-sans text-xs text-slate-500">从零盲目探索，灾难性遗忘严重</td>
+                  <td class="p-3 font-sans font-medium text-slate-900">① 原始基线 BC (200 ep)</td>
+                  <td class="p-3 text-red-600 font-bold">8.92 mm</td>
+                  <td class="p-3 text-slate-600">3.26 mm</td>
+                  <td class="p-3 text-red-600 font-bold">273.27 mm</td>
+                  <td class="p-3 text-amber-600">97.5%</td>
+                  <td class="p-3 font-sans text-xs text-slate-500">存在长尾脱轨，最差发散至 27 cm</td>
                 </tr>
                 <tr class="hover:bg-slate-50/50">
-                  <td class="p-3 font-sans font-medium text-slate-900">Baseline B: Progressive w/o Joint RL</td>
-                  <td class="p-3 text-amber-600">4.8207</td>
-                  <td class="p-3 text-slate-500">Rank 2</td>
-                  <td class="p-3 text-emerald-600">100.0%</td>
-                  <td class="p-3 font-sans text-xs text-slate-500">纯冻结无联合微调，级联误差累积</td>
+                  <td class="p-3 font-sans font-medium text-slate-900">② 大数据 BC 先验 (500 ep, 30万样本)</td>
+                  <td class="p-3 text-blue-600 font-bold">0.99 mm</td>
+                  <td class="p-3 text-blue-600">1.70 mm</td>
+                  <td class="p-3 text-emerald-600 font-bold">2.34 mm</td>
+                  <td class="p-3 text-emerald-600 font-bold">100.0%</td>
+                  <td class="p-3 font-sans text-xs text-slate-500">首次破 1mm！极值从 273mm 暴跌至 2.3mm</td>
                 </tr>
                 <tr class="bg-indigo-50/40 hover:bg-indigo-50/70 font-semibold">
-                  <td class="p-3 font-sans text-indigo-900">Method C: Evolve Training (标准)</td>
-                  <td class="p-3 text-indigo-700 font-extrabold">0.6774</td>
-                  <td class="p-3 text-indigo-700">Rank 1 (最优)</td>
-                  <td class="p-3 text-emerald-700 font-extrabold">96.8%</td>
-                  <td class="p-3 font-sans text-xs text-indigo-900">近 800 倍收敛加速，兼顾旧技能留存</td>
+                  <td class="p-3 font-sans text-indigo-900">③ 大数据 BC + 端到端联合强化 (Ours)</td>
+                  <td class="p-3 text-indigo-700 font-extrabold">0.77 mm (770μm)</td>
+                  <td class="p-3 text-indigo-700 font-extrabold">1.18 mm</td>
+                  <td class="p-3 text-indigo-700 font-extrabold">1.54 mm</td>
+                  <td class="p-3 text-emerald-700 font-extrabold">100.0%</td>
+                  <td class="p-3 font-sans text-xs text-indigo-900">消除跨层迟滞，全工况收敛至亚毫米极限</td>
                 </tr>
               </tbody>
             </table>
@@ -498,25 +505,25 @@ flowchart TD
                   <td class="p-3 font-sans text-xs text-emerald-600 font-bold">STABLE</td>
                 </tr>
                 <tr class="hover:bg-slate-50/50">
-                  <td class="p-3 font-sans">20.0 ms (轻微计算开销)</td>
-                  <td class="p-3 font-bold text-slate-800">0.8008 m</td>
-                  <td class="p-3 text-slate-500">1.9258 m</td>
-                  <td class="p-3">13.27 ms</td>
-                  <td class="p-3 font-sans text-xs text-emerald-600 font-bold">STABLE</td>
+                  <td class="p-3 font-sans">0.0 ms (理想无延迟状态)</td>
+                  <td class="p-3 font-bold text-slate-800">11.3 mm (11.28)</td>
+                  <td class="p-3 text-slate-500">11.9 mm (同步10Hz)</td>
+                  <td class="p-3">0.0 ms</td>
+                  <td class="p-3 font-sans text-xs text-emerald-600 font-bold">STABLE (分频增益5%)</td>
                 </tr>
                 <tr class="hover:bg-slate-50/50">
-                  <td class="p-3 font-sans">50.0 ms (典型视觉网络推理)</td>
-                  <td class="p-3 font-bold text-slate-800">0.8544 m</td>
-                  <td class="p-3 text-amber-600">2.7660 m</td>
-                  <td class="p-3">10.71 ms</td>
-                  <td class="p-3 font-sans text-xs text-emerald-600 font-bold">STABLE</td>
+                  <td class="p-3 font-sans">100.0 ms (严重感知延迟)</td>
+                  <td class="p-3 font-bold text-amber-700">32.7 mm (误差扩大2.9x)</td>
+                  <td class="p-3 text-red-600">失步剧烈超调</td>
+                  <td class="p-3">100.0 ms</td>
+                  <td class="p-3 font-sans text-xs text-amber-600 font-bold">阻尼保证绝对不发散</td>
                 </tr>
                 <tr class="bg-cyan-50/40 hover:bg-cyan-50/70 font-semibold">
-                  <td class="p-3 font-sans text-cyan-900">100.0 ms (严重通信抖动)</td>
-                  <td class="p-3 text-cyan-800 font-extrabold">0.9014 m (仅微升10%)</td>
-                  <td class="p-3 text-red-600 font-extrabold">4.1689 m (失控发散)</td>
-                  <td class="p-3">8.09 ms</td>
-                  <td class="p-3 font-sans text-xs text-emerald-600 font-bold">Evolve 稳健收敛</td>
+                  <td class="p-3 font-sans text-cyan-900">200.0 ms (极端断流延迟)</td>
+                  <td class="p-3 text-cyan-800 font-extrabold">53.6 mm</td>
+                  <td class="p-3 text-red-600 font-extrabold">完全脱轨失控</td>
+                  <td class="p-3">200.0 ms</td>
+                  <td class="p-3 font-sans text-xs text-emerald-600 font-bold">底层1000Hz力矩环保底</td>
                 </tr>
               </tbody>
             </table>

@@ -234,13 +234,13 @@
   <!-- Abstract -->
   <div class="abstract-box">
     <strong>摘要 (Abstract) — </strong>
-    具身智能的核心挑战不仅在于如何训练一个具有通用能力的模型，更在于如何将不同来源的数据、不同层次的控制能力以及不同机器人形态之间的物理差异高效组织起来。当前以视觉-语言-动作（VLA）为代表的研究尝试通过单体端到端多模态网络建立从感知到动作的黑盒映射，然而真实机器人天然具备多时间尺度、异构传感器与分层控制回路的物理特性。盲目的端到端黑盒学习面临样本效率低下、灾难性遗忘严重、强依赖严格时间同步多模态数据，以及跨硬件形态难以迁移的根本困境。
+    具身智能的核心挑战不仅在于如何训练一个具有通用能力的模型，更在于如何将不同来源的数据、不同层次的控制能力以及不同机器人形态之间的物理差异高效组织起来。当前以视觉-语言-动作（VLA）为代表的研究尝试通过单体端到端多模态网络建立从高层感知到动作力矩的黑盒映射，然而真实机器人天然具备多时间尺度、异构传感器与分层控制回路的物理特性。盲目的单体黑盒学习面临探索空间爆炸、闭环协变量漂移（Covariate Shift）与灾难性遗忘的严峻困境。
     <br><br>
-    本文提出 <strong>Evolve Training（具身智能控制层级的渐进式与可组合学习框架）</strong>。其核心理念为：<strong>“从内环到外环，从简单物理能力到复杂认知能力，一次增加一个模块，一次增加一种能力”</strong>。每引入一个新功能模块，首先利用异构数据与传统求解器进行监督模仿预训练建立基础能力；随后接入控制体系并冻结已有模块进行接口集成冷启动；最后通过带参数留存约束（$\mathcal{L}_{\text{retain}}$）与接口流形正则的阶段性端到端强化学习进行联合优化。在执行阶段，框架保持分层多频异步推理（底层动力学 1000 Hz，中层运动学 100 Hz，高层视觉 20 Hz），解耦计算延迟对实时物理闭环稳定性的冲击。
+    本文系统提出并实证验证了 <strong>Evolve Training（具身智能控制层级的渐进式与可组合学习框架）</strong>。其核心哲学为：<strong>“端到端是阶段性的联合优化手段，而不是从零学习所有能力的起点；控制架构应按物理时间尺度分层生长，以高质量监督模仿（BC）构筑物理吸引子底座，以端到端强化微调压榨系统协同精度。”</strong>
     <br><br>
-    在 Franka Emika Panda 七自由度机械臂与 MuJoCo 真实物理仿真环境中的实测结果表明：(1) <strong>样本效率与能力留存</strong>：Evolve Training 联合微调收敛损失达到 <strong>0.6774</strong>，相较于单体端到端模型（534.67）精度提升近 800 倍，旧任务能力保留率高达 <strong>96.8%</strong>（对照单体微调的 52.4% 严重遗忘）；(2) <strong>异构数据利用</strong>：动力学、运动学与视觉模块在非同步数据流上独立预训练，对严格时间对齐多模态样本的需求降为 <strong>0 帧</strong>，真机数据采集工时压缩 <strong>8.9 倍</strong>；(3) <strong>低成本能力迁移</strong>：更换相机传感器仅需微调标定模块（样本成本为从头训练的 <strong>3.5%</strong>）；更换末端工具仅需适配底层感知（样本成本 <strong>5.5%</strong>）；更换机器人本体时保留高层视觉与运动学认知，样本成本降低 <strong>88.0%</strong>；(4) <strong>多频异步鲁棒性</strong>：面对高达 100 ms 的严重感知传输延迟，1000 Hz 动力学内环提供实时阻尼约束，末端跟踪误差稳定在 <strong>0.9014 m</strong>，而传统同步低频控制因延迟累积导致超调发散至 <strong>4.1689 m</strong>。
+    在 Franka Emika Panda 七自由度机械臂与 MuJoCo 严格物理闭环环境中的实测结果表明：(1) <strong>动力学内环鲁棒性演进</strong>：针对纯模仿内环易失稳发散的死穴，通过工作空间覆盖扩展（48.5 万样本）与 DAgger 纠偏扰动力矩注入，M0 跟踪 RMSE 从 438.80 mm 直降 99.5% 达到 <strong>2.07 mm</strong>；(2) <strong>端到端联合强化微调的飞跃提升</strong>：在 40 个随机目标与 1.0–3.0 kg 动态重载下执行端到端任务损失联合强化（Joint Task FT），平均闭环跟踪误差从 8.92 mm 压缩至 <strong>0.77 mm（770 微米）</strong>，最坏情况误差压制至 1.54 mm，到点成功率达到稳固的 <strong>100.0%</strong>；(3) <strong>时序负载感知</strong>：数据扩增后质量估计 MAE 从 0.247 kg 降至 <strong>0.081 kg（仅 81 克）</strong>；(4) <strong>分层异步延迟边界</strong>：1000 Hz 动力学内环有效隔离了 100 ms 严重感知延迟对底层物理伺服的冲击，保证系统稳定不脱轨。
     <br><br>
-    <strong>关键词：</strong>具身智能；渐进式学习；模块化控制；跨具身迁移；分层异步推理；动力学内环
+    <strong>关键词：</strong>具身智能；渐进式学习；行为克隆；端到端微调；分层控制；动力学内环；MuJoCo
   </div>
 
   <!-- Section 1: Introduction -->
@@ -370,54 +370,62 @@
   </p>
 
   <!-- Exp 1 -->
-  <h3 class="subsection-title">4.1 实验 1：渐进式生长的有效性与旧能力保留（检验假设 H1, H3, H4）</h3>
+  <h3 class="subsection-title">4.1 实验 1：严格物理模型下从 BC 筑底到端到端微调 (Strict MuJoCo Benchmark)</h3>
   <p>
-    对比单体端到端强化学习（Baseline A）、无联合优化的纯模块化冻结（Baseline B）与 Evolve Training（Method C）。
+    在严格物理环境下（1 ms 步长、关节限位全开、动态碰撞全开、1.0–3.0 kg 随机负载、40 个测试目标点连续到达），对比不同演化阶段的闭环控制表现：
   </p>
 
   <div class="table-wrapper">
-    <div class="table-caption">表 2：实验 1 渐进式训练与基线对照组实测结果</div>
+    <div class="table-caption">表 2：严格物理测试环境下从 BC 筑底到端到端强化的实测对照</div>
     <table class="academic-table">
       <thead>
         <tr>
-          <th>测试方案组别</th>
-          <th>最终收敛损失 (Final Loss)</th>
-          <th>样本效率排名</th>
-          <th>旧任务保留率 (Retention %)</th>
-          <th>训练耗时 (s)</th>
-          <th>定性结论</th>
+          <th>演进阶段与训练方案</th>
+          <th>平均末端误差 (Mean)</th>
+          <th>p90 尾部误差</th>
+          <th>最坏极值 (Max)</th>
+          <th>成功率 (<2cm)</th>
+          <th>物理表现定性分析</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Baseline A (Monolithic E2E RL)</td>
-          <td>534.6737</td>
-          <td>Rank 3 (最差)</td>
-          <td>52.4% (严重遗忘)</td>
-          <td>2.56 s</td>
-          <td>从零搜索动作空间，灾难性遗忘严重</td>
+          <td>① 原始基线 BC (200 ep, 12万样本)</td>
+          <td>8.92 mm</td>
+          <td>3.26 mm</td>
+          <td>273.27 mm</td>
+          <td>97.5%</td>
+          <td>存在长尾脱靶发散，最坏误差达 27 厘米</td>
         </tr>
         <tr>
-          <td>Baseline B (Progressive w/o Joint RL)</td>
-          <td>4.8207</td>
-          <td>Rank 2 (次优)</td>
-          <td>100.0% (纯被动冻结)</td>
-          <td>1.20 s</td>
-          <td>独立预训练缺乏协同，级联误差累积</td>
+          <td>② 大数据 BC 先验 (500 ep, 30万样本+纠偏)</td>
+          <td>0.99 mm</td>
+          <td>1.70 mm</td>
+          <td>2.34 mm</td>
+          <td>100.0%</td>
+          <td>首次破 1mm！极值从 273mm 暴跌至 2.3mm</td>
+        </tr>
+        <tr>
+          <td>③ 原始微调策略 (200 ep BC + 250 步 FT)</td>
+          <td>1.03 mm</td>
+          <td>1.63 mm</td>
+          <td>2.71 mm</td>
+          <td>100.0%</td>
+          <td>起点数据受限，微调在 1 mm 处见顶</td>
         </tr>
         <tr class="highlight-row">
-          <td><strong>Method C (Evolve Training 标准方案)</strong></td>
-          <td><strong>0.6774</strong></td>
-          <td><strong>Rank 1 (最优)</strong></td>
-          <td><strong>96.8%</strong></td>
-          <td>4.50 s</td>
-          <td><strong>收敛精度提升近 800 倍，彻底阻断遗忘</strong></td>
+          <td><strong>④ 大数据 + 端到端联合强化 (Ours)</strong></td>
+          <td><strong>0.77 mm (770 μm)</strong></td>
+          <td><strong>1.18 mm</strong></td>
+          <td><strong>1.54 mm</strong></td>
+          <td><strong>100.0%</strong></td>
+          <td><strong>全工况收敛至亚毫米极限，极值仅 1.54 mm</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
   <p>
-    <strong>分析：</strong>单体端到端强化学习面临高维动作空间探索诅咒，且在新任务学习时网络权重被剧烈冲刷，导致旧任务性能减半（验证 H1）；Evolve Training 借助模仿初始化提供吸引子，并以 $\mathcal{L}_{\text{retain}}$ 锚定历史参数，保留率高达 96.8%（验证 H4）；阶段性联合微调将损失压制至 0.6774，彻底消除了 Baseline B 的级联稳态残差（验证 H3）。
+    <strong>分析：</strong>实验清晰验证了“大数据 BC 筑底 + 阶段性端到端微调冲顶”的双阶段机制：加数据与纠偏注入将极端误差从 273.27 mm 压降 99.1% 至 2.34 mm，消除了发散风险；在此基础上，端到端任务损失微调消除了跨层时钟离散滞后与阻抗不匹配，将误差进一步榨取至 770 微米。
   </p>
 
   <!-- Exp 2 -->
@@ -522,7 +530,7 @@
   <!-- Exp 5 -->
   <h3 class="subsection-title">4.4 实验 5：多频分层异步推理与通信延迟鲁棒性（检验假设 H5）</h3>
   <p>
-    对高层视觉输入人为注入四档计算/通信延迟：$\delta \in \{0\text{ ms}, 20\text{ ms}, 50\text{ ms}, 100\text{ ms}\}$。对比全同步 20 Hz 控制与 Evolve 分层多频异步架构（1000 Hz / 100 Hz / 20 Hz）。
+    对高层视觉输入人为注入不同档位的计算/通信延迟，对比全同步 10 Hz 控制与 Evolve 分层多频异步架构（1000 Hz / 100 Hz / 10 Hz）的闭环跟踪表现。
   </p>
 
   <div class="table-wrapper">
@@ -531,8 +539,8 @@
       <thead>
         <tr>
           <th>感知注入延迟 ($\delta$)</th>
-          <th>Evolve 分层异步 (1000/100/20 Hz) RMSE</th>
-          <th>同步全系统 (20 Hz 阶跃力矩) RMSE</th>
+          <th>Evolve 分层异步架构 (1000/100/10 Hz) RMSE</th>
+          <th>同步控制 (10 Hz) RMSE</th>
           <th>最坏情况内环响应延迟</th>
           <th>闭环稳定性评级</th>
         </tr>
@@ -540,46 +548,36 @@
       <tbody>
         <tr>
           <td>$\delta = 0.0\text{ ms}$ (理想无延迟)</td>
-          <td><strong>0.8157 m</strong></td>
-          <td>1.5091 m</td>
-          <td>45.71 ms (冷启动开销)</td>
-          <td>稳定 (STABLE)</td>
+          <td><strong>11.3 mm</strong></td>
+          <td>11.9 mm</td>
+          <td>1.0 ms (实时硬闭环)</td>
+          <td>稳定 (分频增益 5%)</td>
         </tr>
         <tr>
-          <td>$\delta = 20.0\text{ ms}$ (轻微计算开销)</td>
-          <td><strong>0.8008 m</strong></td>
-          <td>1.9258 m</td>
-          <td>13.27 ms</td>
-          <td>稳定 (STABLE)</td>
-        </tr>
-        <tr>
-          <td>$\delta = 50.0\text{ ms}$ (典型深度网络耗时)</td>
-          <td><strong>0.8544 m</strong></td>
-          <td>2.7660 m (超调激增)</td>
-          <td>10.71 ms</td>
-          <td>稳定 (STABLE)</td>
+          <td>$\delta = 100.0\text{ ms}$ (严重感知延迟)</td>
+          <td><strong>32.7 mm (误差扩大 2.9 倍)</strong></td>
+          <td>失步脱轨</td>
+          <td>1.0 ms (力矩阻尼保底)</td>
+          <td>阻尼保证绝对不发散</td>
         </tr>
         <tr class="highlight-row">
-          <td><strong>$\delta = 100.0\text{ ms}$ (严重网络抖动)</strong></td>
-          <td><strong>0.9014 m (仅微升 10.5%)</strong></td>
-          <td><strong>4.1689 m (失控发散)</strong></td>
-          <td>8.09 ms</td>
-          <td><strong>Evolve 稳健收敛</strong></td>
+          <td><strong>$\delta = 200.0\text{ ms}$ (极端网络断流)</strong></td>
+          <td><strong>53.6 mm (无共振暴冲)</strong></td>
+          <td><strong>完全脱轨失控</strong></td>
+          <td>1.0 ms</td>
+          <td><strong>底层 1000 Hz 力矩环保底</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
   <p>
-    <strong>分析：</strong>当延迟升至 100 ms 时，传统同步控制因电机无法及时获得位移反馈产生剧烈共振失稳（RMSE 达 4.17 m）；而 Evolve 异步架构在视觉未刷新期间，底层的 $M_0$ 策略依然以 1 ms 周期高速闭环执行力矩阻尼与安全约束，系统平稳减速，误差稳定在 0.90 m 内，充分证实了分层多频异步架构的必要性（验证 H5）。
+    <strong>分析：</strong>实验表明分层异步的核心收益在于解耦计算延迟对底层物理伺服的污染：在 100–200 ms 严重感知延迟下，1000 Hz 动力学内环持续提供 1 ms 闭环物理阻尼，保证系统平稳收敛不暴冲脱轨；同时也界定了物理边界：感知延迟是精度的首要瓶颈，算力应优先向低延迟感知倾斜。
   </p>
 
   <!-- Section 5: Conclusion -->
   <h2 class="section-title">5. 结论 (Conclusion)</h2>
   <p>
-    具身智能不应忽视机器人物理控制的天然层次。本文提出的 <strong>Evolve Training（具身智能控制层级的渐进式与可组合学习）</strong> 实现了从动力学内环向视觉认知外环的逐层生长，融合了监督模仿学习的高样本效率、阶段性联合强化学习的全局协同性，以及多频异步推理的物理实时性。
-  </p>
-  <p>
-    在 Franka 七自由度机械臂上的全套实验严格证实：渐进式训练收敛损失降低近 800 倍，旧任务保留率高达 96.8%；分层学习摆脱了强同步多模态数据束缚，数据采集工时压缩 8.9 倍；模块热插拔将跨传感器、跨工具与跨机器人形态的迁移成本削减至 3.5%–12%；分层异步架构成功抵御了 100 ms 的严重感知延迟。<strong>学习是渐进的，能力是可组合、可迁移的。</strong> Evolve Training 为构建可持续进化、跨机器人通用的新一代具身智能基础架构提供了坚实的理论与实验支撑。
+    具身智能不应忽视机器人物理控制的天然层次。本文通过严格的真实物理实验证实：<strong>“大数据各环 BC 筑底 + 阶段性端到端强化微调冲顶”</strong> 是兼具样本安全性与亚毫米级极限精度的具身学习正道。系统最终在严苛物理环境下收敛至 <strong>0.77 毫米（770 微米）</strong> 的平均精度与 100% 的到点成功率，为新一代模块化、可组合、可持续生长的具身智能基础架构奠定了坚实的基础。
   </p>
 
   <!-- References -->
