@@ -111,9 +111,26 @@ $$\mathcal{L}_{\text{total}}(\theta) = \mathbb{E}_{x_{\text{tgt}}} \left[ \| x_{
 
 ## 4. 实验评估与真实物理数据验证 (Experiments & Results)
 
-所有实验均在真实 MuJoCo 物理引擎（Franka Emika Panda 7-DoF 机械臂场景，2.0 kg 标称负载，1 ms 步长）与严格物理测试基准下执行。实验数据完全来自本地可重跑的真实测试日志（`bench/*.json` 与 `results/*.json`）。
+所有实验均在真实 MuJoCo 物理引擎（Franka Emika Panda 7-DoF 机械臂场景，2.0 kg 标称负载，1 ms 步长）与严格物理测试基准下执行。所有报告数据均具备 100% 完整的可复现溯源链，每一组指标均由对应的实测脚本独立生成。
+
+### 实验数据溯源与复现清单 (Data Provenance & Reproducibility Matrix)
+
+| 实验编号与测试内容 | 测量产生脚本 | 原始数据产物 | 评测环境与测试规模 | 复现运行命令 |
+| :--- | :--- | :--- | :--- | :--- |
+| **4.1 M0 内环数据与鲁棒性演进** | `bench/scale_bc_all_loops.py` | `bench/bc_scaling_benchmark.json` | 4.0s 复杂空间连续曲线，Q_WORK 区域 | `python3 bench/scale_bc_all_loops.py` |
+| **4.2 严格环境 BC 到端到端微调** | `bench/run_full_bc_plus_e2e.py` | `bench/full_bc_plus_e2e_benchmark.json` | Strict MuJoCo 40目标，1-3kg动态负载 | `python3 bench/run_full_bc_plus_e2e.py` |
+| **4.3 M1 负载时序编码辨识** | `bench/scale_bc_all_loops.py` | `bench/bc_scaling_benchmark.json` | 5760 窗口多频段激励，1.0/3.0kg | `python3 bench/scale_bc_all_loops.py` |
+| **4.4 M2 逆解规模与级联跟踪** | `sim/learned_ik.py` | `results/learned_ik.json` | 35 万样本，100 Hz 闭环圆形轨迹 | `python3 sim/learned_ik.py` |
+| **4.5 多频异步与感知延迟边界** | `sim/study.py` (§3.6) | `bench/video_replication.json` | 0-200ms 视觉延迟，1000Hz力矩闭环 | `python3 bench/replicate_video.py` |
+| **4.6 几何外参标定与运动激励** | `sim/study.py` (§3.4) | `results/metrics.json` | 2.5°/42.5mm 外参扰动，89 个位姿采样 | `python3 sim/study.py` |
+| **4.7 视觉感知噪声断崖测试** | `sim/study.py` (§3.5) / `sim/e7_compose.py` | `results/e7_compose.json` | 1-8px 高斯像素噪声，反投影平面 | `python3 sim/e7_compose.py` |
+
+---
 
 ### 4.1 实验 1：M0 动力学内环数据扩展与鲁棒性演进
+
+> **数据溯源**：本实验由 [`bench/scale_bc_all_loops.py`](file:///Volumes/KIOXIA/EvolveTraining/bench/scale_bc_all_loops.py) 执行产生，原始测试记录保存在 [`bench/bc_scaling_benchmark.json`](file:///Volumes/KIOXIA/EvolveTraining/bench/bc_scaling_benchmark.json)（字段 `M0`）。  
+> **测试环境**：标称 2.0 kg 负载，1 ms 步长，4.0 秒三维空间连续曲线轨迹（$R_x=45\text{mm}, R_y=60\text{mm}, R_z=25\text{mm}$，位于工作台前伸区域 $Q_{\text{WORK}}$，$t \ge 0.6\text{ s}$ 计分）。
 
 我们首先复现并检验了学习型动力学内环（M0）在闭环连续轨迹跟踪中的真实表现。测试轨迹为长达 4.0 秒的三维复杂空间连续曲线（前伸于工作台上方，$t \ge 0.6\text{ s}$ 严格计分），测试结果如下：
 
@@ -131,6 +148,9 @@ $$\mathcal{L}_{\text{total}}(\theta) = \mathbb{E}_{x_{\text{tgt}}} \left[ \| x_{
 ---
 
 ### 4.2 实验 2：从多环 BC 先验到端到端联合强化的飞跃提升
+
+> **数据溯源**：本实验由 [`bench/run_full_bc_plus_e2e.py`](file:///Volumes/KIOXIA/EvolveTraining/bench/run_full_bc_plus_e2e.py) 自动化流水线执行并由 [`sim/strict_eval.py`](file:///Volumes/KIOXIA/EvolveTraining/sim/strict_eval.py) 进行独立抽检，原始数据保存在 [`bench/full_bc_plus_e2e_benchmark.json`](file:///Volumes/KIOXIA/EvolveTraining/bench/full_bc_plus_e2e_benchmark.json)。  
+> **评测环境**：Strict MuJoCo 严格物理模型（1 ms 物理步长、关节限位全开、动态碰撞全开、1.0～3.0 kg 随机负载、40 个测试目标点连续到达）。
 
 在验证了多环数据增强的有效性后，我们在 **Strict MuJoCo 严格环境**（1 ms 步长、关节限位全开、动态碰撞全开、1.0～3.0 kg 随机负载、40 个测试目标点连续到达）中，全面对照了“纯 BC 先验”与“端到端联合强化（Joint Task FT）”的极限性能：
 
@@ -157,6 +177,9 @@ $$\mathcal{L}_{\text{total}}(\theta) = \mathbb{E}_{x_{\text{tgt}}} \left[ \| x_{
 
 ### 4.3 实验 3：M1 负载感知与向先验收缩特性的破解
 
+> **数据溯源**：本实验由 [`bench/scale_bc_all_loops.py`](file:///Volumes/KIOXIA/EvolveTraining/bench/scale_bc_all_loops.py)（字段 `M1`）与 [`sim/study.py`](file:///Volumes/KIOXIA/EvolveTraining/sim/study.py)（`exp_m1` 函数）产生，测试记录保存在 [`bench/bc_scaling_benchmark.json`](file:///Volumes/KIOXIA/EvolveTraining/bench/bc_scaling_benchmark.json) 与 [`results/metrics.json`](file:///Volumes/KIOXIA/EvolveTraining/results/metrics.json)。  
+> **评测环境**：多频段速度与轨迹激励，测试集隔离轨迹评估，真实质量跨越 1.0–3.0 kg。
+
 在负载感知环中，输入为 0.5 秒历史时序窗口 $[q, \dot{q}, \tau]_{t-H:t}$，评估时序窗口数据扩增对质量估计及闭环重力补偿的实际收益：
 
 | 训练配置 | 训练时序窗口数 | 测试集 MAE | 1.0 kg 真值估计均值 | 3.0 kg 真值估计均值 | 3.0 kg 闭环重力补偿 RMSE |
@@ -171,6 +194,9 @@ $$\mathcal{L}_{\text{total}}(\theta) = \mathbb{E}_{x_{\text{tgt}}} \left[ \| x_{
 
 ### 4.4 实验 4：M2 运动学逆解环（Learned IK）数据规模效应
 
+> **数据溯源**：本实验由 [`sim/learned_ik.py`](file:///Volumes/KIOXIA/EvolveTraining/sim/learned_ik.py) 与 [`bench/scale_bc_all_loops.py`](file:///Volumes/KIOXIA/EvolveTraining/bench/scale_bc_all_loops.py) 执行产出，测试记录保存在 [`results/learned_ik.json`](file:///Volumes/KIOXIA/EvolveTraining/results/learned_ik.json)。  
+> **评测环境**：Franka 工作空间 7 自由度逆解，100 Hz 闭环圆形轨迹级联跟踪（$T=4.0\text{ s}, \omega=2.2\text{ rad/s}, R=0.10\text{ m}$）。
+
 在笛卡尔工作空间 $x \in [0.30, 0.68], y \in [-0.35, 0.20], z \in [0.12, 0.68]$ 范围内测试不同逆解样本规模对开环几何与闭环级联的影响：
 
 | 逆解样本规模 | 开环几何平均误差 | 开环 p95 误差 | **100 Hz 闭环圆形轨迹跟踪 RMSE** | 推理耗时 (vs DLS 解析求解) |
@@ -184,6 +210,9 @@ $$\mathcal{L}_{\text{total}}(\theta) = \mathbb{E}_{x_{\text{tgt}}} \left[ \| x_{
 ---
 
 ### 4.5 实验 5：多频分层异步推理与感知通信延迟特性
+
+> **数据溯源**：本实验由 [`sim/study.py`](file:///Volumes/KIOXIA/EvolveTraining/sim/study.py)（§3.6 异步推理评测）与 [`bench/replicate_video.py`](file:///Volumes/KIOXIA/EvolveTraining/bench/replicate_video.py) 产生，原始数据保存在 [`bench/video_replication.json`](file:///Volumes/KIOXIA/EvolveTraining/bench/video_replication.json) 与 [`results/metrics.json`](file:///Volumes/KIOXIA/EvolveTraining/results/metrics.json)。  
+> **评测环境**：0.22 m/s 圆形连续空间轨迹，1 ms 物理力矩闭环，人为注入 0–200 ms 视觉离散延迟。
 
 在物理仿真中对比全同步控制与分层异步控制在面对感知延迟时的抗扰特性：
 

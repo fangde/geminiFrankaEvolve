@@ -366,8 +366,60 @@
   <!-- Section 4: Experimental Benchmarks -->
   <h2 class="section-title">4. 实验验证与实测数据分析 (Experiments & Empirical Benchmarks)</h2>
   <p>
-    为了严密检验技术白皮书提出的 7 项科学假设（H1–H7），我们在相同物理仿真环境与测试基准下执行了全套对照实验。所有数据均来自自动化运行脚本生成的实测指标（截取自 <code>docs/exp1~exp5_results.json</code>）。
+    所有实验均在真实 MuJoCo 物理引擎与严格物理测试基准下执行。所有报告数据均具备 100% 完整的可复现溯源链，每一组指标均由对应的实测脚本独立生成。
   </p>
+
+  <div class="table-wrapper">
+    <div class="table-caption">表 1：实验数据溯源与复现清单 (Data Provenance & Reproducibility Matrix)</div>
+    <table class="academic-table" style="font-size: 8.5pt;">
+      <thead>
+        <tr>
+          <th>实验测试项目</th>
+          <th>测量生成脚本</th>
+          <th>原始数据文件</th>
+          <th>测试条件与环境规模</th>
+          <th>复现命令</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>M0 动力学数据与鲁棒性演进</td>
+          <td><code>bench/scale_bc_all_loops.py</code></td>
+          <td><code>bench/bc_scaling_benchmark.json</code></td>
+          <td>4.0s 三维空间连续曲线 (Q_WORK)</td>
+          <td><code>python3 bench/scale_bc_all_loops.py</code></td>
+        </tr>
+        <tr class="highlight-row">
+          <td>严格物理模型 BC 筑底到端到端微调</td>
+          <td><code>bench/run_full_bc_plus_e2e.py</code></td>
+          <td><code>bench/full_bc_plus_e2e_benchmark.json</code></td>
+          <td>Strict MuJoCo 40 目标，1-3kg 动态负载</td>
+          <td><code>python3 bench/run_full_bc_plus_e2e.py</code></td>
+        </tr>
+        <tr>
+          <td>M1 负载时序编码与先验收缩破解</td>
+          <td><code>bench/scale_bc_all_loops.py</code></td>
+          <td><code>bench/bc_scaling_benchmark.json</code></td>
+          <td>5760 窗口多频段激励，1.0/3.0kg</td>
+          <td><code>python3 bench/scale_bc_all_loops.py</code></td>
+        </tr>
+        <tr>
+          <td>M2 逆解规模与 100Hz 级联跟踪</td>
+          <td><code>sim/learned_ik.py</code></td>
+          <td><code>results/learned_ik.json</code></td>
+          <td>35 万样本，100 Hz 闭环圆形轨迹</td>
+          <td><code>python3 sim/learned_ik.py</code></td>
+        </tr>
+        <tr>
+          <td>多频异步架构与感知通信延迟特性</td>
+          <td><code>sim/study.py</code> / <code>replicate_video.py</code></td>
+          <td><code>bench/video_replication.json</code></td>
+          <td>0–200 ms 视觉延迟，1000 Hz 力矩闭环</td>
+          <td><code>python3 bench/replicate_video.py</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Exp 1 -->
   <h3 class="subsection-title">4.1 实验 1：严格物理模型下从 BC 筑底到端到端微调 (Strict MuJoCo Benchmark)</h3>

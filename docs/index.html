@@ -334,8 +334,60 @@ flowchart TD
             实验验证与量化对比 (Experiments & Empirical Benchmarks)
           </h3>
           <p class="text-slate-600 text-sm mt-2">
-            在相同物理仿真环境与测评基准下，系统测试了白皮书全部 7 个科学假设（H1–H7）：
+            所有实验均在真实 MuJoCo 物理闭环下运行。每一组数据均提供 100% 完整的测量脚本与原始日志溯源链：
           </p>
+
+          <!-- Provenance Matrix -->
+          <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="p-2.5">实验评测项目</th>
+                  <th class="p-2.5">执行测量脚本</th>
+                  <th class="p-2.5">原始数据日志</th>
+                  <th class="p-2.5">测试环境规模</th>
+                  <th class="p-2.5">本地复现命令</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-mono text-slate-600">
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-2.5 font-sans font-medium text-slate-900">M0 动力学数据扩增与闭环鲁棒性</td>
+                  <td class="p-2.5 text-indigo-600">bench/scale_bc_all_loops.py</td>
+                  <td class="p-2.5 text-slate-500">bench/bc_scaling_benchmark.json</td>
+                  <td class="p-2.5 font-sans">4.0s 复杂空间曲线 (Q_WORK)</td>
+                  <td class="p-2.5 text-slate-500">python3 bench/scale_bc_all_loops.py</td>
+                </tr>
+                <tr class="bg-emerald-50/40 hover:bg-emerald-50/70 font-semibold">
+                  <td class="p-2.5 font-sans text-emerald-900">严格物理模型 BC筑底到端到端强化</td>
+                  <td class="p-2.5 text-emerald-700">bench/run_full_bc_plus_e2e.py</td>
+                  <td class="p-2.5 text-emerald-700">bench/full_bc_plus_e2e_benchmark.json</td>
+                  <td class="p-2.5 font-sans text-emerald-900">Strict MuJoCo 40目标, 1-3kg负载</td>
+                  <td class="p-2.5 text-emerald-700">python3 bench/run_full_bc_plus_e2e.py</td>
+                </tr>
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-2.5 font-sans font-medium text-slate-900">M1 负载时序编码与先验收缩破解</td>
+                  <td class="p-2.5 text-indigo-600">bench/scale_bc_all_loops.py</td>
+                  <td class="p-2.5 text-slate-500">bench/bc_scaling_benchmark.json</td>
+                  <td class="p-2.5 font-sans">5760 窗口多频段激励, 1-3kg</td>
+                  <td class="p-2.5 text-slate-500">python3 bench/scale_bc_all_loops.py</td>
+                </tr>
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-2.5 font-sans font-medium text-slate-900">M2 运动学逆解规模与级联跟踪</td>
+                  <td class="p-2.5 text-indigo-600">sim/learned_ik.py</td>
+                  <td class="p-2.5 text-slate-500">results/learned_ik.json</td>
+                  <td class="p-2.5 font-sans">35 万样本, 100Hz圆形轨迹</td>
+                  <td class="p-2.5 text-slate-500">python3 sim/learned_ik.py</td>
+                </tr>
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-2.5 font-sans font-medium text-slate-900">多频分层异步与感知通信延迟特性</td>
+                  <td class="p-2.5 text-indigo-600">sim/study.py / replicate_video.py</td>
+                  <td class="p-2.5 text-slate-500">bench/video_replication.json</td>
+                  <td class="p-2.5 font-sans">0-200ms 视觉延迟, 1000Hz力矩环</td>
+                  <td class="p-2.5 text-slate-500">python3 bench/replicate_video.py</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Exp 1 Table -->
